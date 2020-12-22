@@ -18,6 +18,15 @@ public @Data class AddressBookData {
 	private String state;
 	private int zip;
 	
+	public AddressBookData(String fullName,String address,long phoneNumber,String city,String state,int zip) {
+		this.fullName=fullName;
+		this.address=address;
+		this.phoneNumber=phoneNumber;
+		this.city=city;
+		this.state=state;
+		this.zip=zip;
+	}
+	
 	public AddressBookData(long id, AddressBookDTO addressBookDTO) {
 		this.id=id;
 		this.fullName=addressBookDTO.fullName;

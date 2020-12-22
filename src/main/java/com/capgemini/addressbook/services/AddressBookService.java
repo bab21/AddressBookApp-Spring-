@@ -10,26 +10,30 @@ import com.capgemini.addressbook.model.AddressBookData;
 
 @Service
 public class AddressBookService implements IAddressBookService {
+	List<AddressBookData> listAddressBookData=new ArrayList<>();
 	
 	public List<AddressBookData> getAddressBookData(){
-		List<AddressBookData> listAddressBookData=new ArrayList<>();
-		listAddressBookData.add(new AddressBookData("Babli","Indrapuri",9988776655L,"Patna","Bihar",880099));
+//		listAddressBookData.add(new AddressBookData("Babli","Indrapuri",9988776655L,"Patna","Bihar",880099));
 		return listAddressBookData;
 	};
 	
 	public AddressBookData getAddressBookDataById(long addressBookDataId) {
-		return new AddressBookData("Babli","Indrapuri",9988776655L,"Patna","Bihar",880099);
+		return listAddressBookData.get((int)addressBookDataId-1);
 	}
 	
 	public AddressBookData createAddressBookData(AddressBookDTO addressBookDTO) {
-		return new AddressBookData(1L,addressBookDTO);
+		AddressBookData addressBookData =new AddressBookData(listAddressBookData.size(),addressBookDTO);
+		listAddressBookData.add(addressBookData);
+		return addressBookData;
 	}
 	
 	public AddressBookData updateAddressBookData(long addressBookDataId,AddressBookDTO addressBookDTO) {
-		return new AddressBookData(addressBookDataId,addressBookDTO);
+		AddressBookData addressBookData =new AddressBookData(1L,addressBookDTO);;
+		listAddressBookData.set(((int) addressBookDataId)-1, addressBookData );
+		return addressBookData;
 	}
 	
 	public void deleteAddressBookData(long addressBookDataId) {
-		
+		listAddressBookData.remove(((int)addressBookDataId)-1);
 	}
 }

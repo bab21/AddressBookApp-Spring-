@@ -3,37 +3,47 @@ package com.capgemini.addressbook.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.addressbook.dto.AddressBookDTO;
 import com.capgemini.addressbook.model.AddressBookData;
+import com.capgemini.addressbook.repository.AddressBookRepository;
 
 @Service
 public class AddressBookService implements IAddressBookService {
 	List<AddressBookData> listAddressBookData=new ArrayList<>();
-	
+	@Autowired
+	private AddressBookRepository addressBookRepository;
+
 	public List<AddressBookData> getAddressBookData(){
-//		listAddressBookData.add(new AddressBookData("Babli","Indrapuri",9988776655L,"Patna","Bihar",880099));
-		return listAddressBookData;
+		List<AddressBookData> addressBookDataList=addressBookRepository.getAllAddressBookData();
+		return addressBookDataList;
 	};
 	
 	public AddressBookData getAddressBookDataById(long addressBookDataId) {
-		return listAddressBookData.get((int)addressBookDataId-1);
+		return addressBookRepository.findAddressBookDataById(addressBookDataId);
 	}
 	
 	public AddressBookData createAddressBookData(AddressBookDTO addressBookDTO) {
-		AddressBookData addressBookData =new AddressBookData(listAddressBookData.size(),addressBookDTO);
-		listAddressBookData.add(addressBookData);
+		AddressBookData addressBookData =new AddressBookData(addressBookDTO);
+		addressBookRepository.save(addressBookData);
 		return addressBookData;
 	}
 	
 	public AddressBookData updateAddressBookData(long addressBookDataId,AddressBookDTO addressBookDTO) {
-		AddressBookData addressBookData =new AddressBookData(1L,addressBookDTO);;
-		listAddressBookData.set(((int) addressBookDataId)-1, addressBookData );
+		AddressBookData addressBookData =this.getAddressBookDataById(addressBookDataId);
+		addressBookData.setAddress(addressBookDTO.address);
+		addressBookData.setCity(addressBookDTO.city);
+		addressBookData.setState(addressBookDTO.state);
+		addressBookData.setFullName(addressBookDTO.fullName);
+		addressBookData.setPhoneNumber(addressBookDTO.phoneNumber);
+		addressBookData.setZip(addressBookDTO.zip);
+		addressBookRepository.save(addressBookData);
 		return addressBookData;
 	}
 	
 	public void deleteAddressBookData(long addressBookDataId) {
-		listAddressBookData.remove(((int)addressBookDataId)-1);
+		addressBookRepository.deleteById(addressBookDataId);
 	}
 }
